@@ -43,12 +43,23 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-5. Crear un superusuario:
+5. **(Opcional) Poblar la base de datos con datos de prueba:**
+```bash
+python populate_db.py
+```
+
+Este script creará automáticamente:
+- Un superusuario (admin / admin123)
+- 3 usuarios de prueba
+- 6 categorías de productos
+- 20+ productos de ejemplo
+
+6. **(Alternativa) Crear un superusuario manualmente:**
 ```bash
 python manage.py createsuperuser
 ```
 
-6. Iniciar el servidor de desarrollo:
+7. Iniciar el servidor de desarrollo:
 ```bash
 python manage.py runserver
 ```
@@ -194,17 +205,93 @@ El backend incluye validaciones automáticas:
 - **psycopg2-binary**: Adaptador de PostgreSQL (para producción)
 - **python-decouple**: Gestión de configuración
 
-## Desarrollo
+## Testing y Pruebas
 
-Para ejecutar las pruebas:
+### Ejecutar Tests
+
+El proyecto incluye tests completos para todas las operaciones CRUD:
+
 ```bash
+# Ejecutar todos los tests
 python manage.py test
+
+# Ejecutar tests de una app específica
+python manage.py test api
+
+# Ejecutar con más detalles
+python manage.py test --verbosity=2
+
+# Ejecutar tests específicos
+python manage.py test api.tests.ProductAPITest
 ```
+
+Los tests cubren:
+- ✅ Modelos (Category, Product)
+- ✅ API CRUD completo (CREATE, READ, UPDATE, DELETE)
+- ✅ Validaciones (precios/stock negativos)
+- ✅ Filtros y búsquedas
+- ✅ Paginación
+- ✅ Endpoints personalizados
+
+### Documentación de Consultas CRUD
+
+📚 **Consulta el archivo `API_EXAMPLES.md`** para ver ejemplos completos de:
+- Consultas con **cURL**
+- Scripts con **Python requests**
+- Clase helper reutilizable para el cliente API
+- Ejemplos de filtros, búsquedas y ordenamiento
+- Todos los endpoints disponibles
+
+### Colección Postman
+
+📮 Importa el archivo `postman_collection.json` en Postman o Thunder Client para:
+- Probar todos los endpoints CRUD
+- Ejemplos pre-configurados
+- Variables de entorno
+- Requests organizados por recurso
+
+### Poblar Base de Datos
+
+Para añadir datos de prueba de forma rápida:
+
+```bash
+python populate_db.py
+```
+
+El script te preguntará si quieres limpiar datos existentes y creará:
+- **Usuarios**: admin, juan, maria, carlos
+- **Categorías**: Electrónica, Ropa, Hogar, Libros, Deportes, Alimentos
+- **Productos**: 20+ productos con datos realistas
+- **Productos especiales**: Algunos con stock bajo, productos inactivos
+
+## Desarrollo
 
 Para crear migraciones después de cambios en los modelos:
 ```bash
 python manage.py makemigrations
 python manage.py migrate
+```
+
+### Archivos del Proyecto
+
+```
+claude-rep/
+├── API_EXAMPLES.md          # 📚 Documentación completa de consultas CRUD
+├── postman_collection.json  # 📮 Colección Postman/Thunder Client
+├── populate_db.py           # 🗄️ Script para poblar base de datos
+├── requirements.txt         # 📦 Dependencias
+├── manage.py               # 🔧 Utilidad de gestión Django
+├── backend/                # ⚙️ Configuración del proyecto
+│   ├── settings.py
+│   ├── urls.py
+│   └── ...
+└── api/                    # 🚀 Aplicación principal
+    ├── models.py           # Modelos Category y Product
+    ├── serializers.py      # Serializadores DRF
+    ├── views.py            # ViewSets y endpoints
+    ├── urls.py             # Rutas de la API
+    ├── admin.py            # Panel de administración
+    └── tests.py            # 🧪 Tests completos CRUD
 ```
 
 ## Próximos Pasos
